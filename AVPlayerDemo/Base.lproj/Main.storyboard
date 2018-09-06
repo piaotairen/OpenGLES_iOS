@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="o9W-fE-otg">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="Wy6-zy-MdP">
+            <objects>
+                <viewController id="o9W-fE-otg" customClass="ViewController" customModule="AVPlayerDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="M8i-B1-qHS" customClass="APLEAGLView">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" barStyle="blackTranslucent" translatesAutoresizingMaskIntoConstraints="NO" id="6vT-Fl-236">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <barButtonItem title="Library" id="2oe-ef-ELG">
+                                        <connections>
+                                            <action selector="loadMovieFromCameraRoll:" destination="o9W-fE-otg" id="5oJ-AW-dfc"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="pwS-82-ekO"/>
+                                    <barButtonItem title="Luma" style="plain" id="gUj-iM-EGq"/>
+                                    <barButtonItem enabled="NO" style="plain" id="6GT-RJ-ZQH">
+                                        <slider key="customView" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" id="f3W-At-AIq">
+                                            <rect key="frame" x="103" y="5" width="120" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <connections>
+                                                <action selector="updateLevels:" destination="o9W-fE-otg" eventType="valueChanged" id="nAu-xd-tdn"/>
+                                            </connections>
+                                        </slider>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="j2M-5y-GhB"/>
+                                    <barButtonItem title="Chroma" style="plain" id="IRn-4i-JT6"/>
+                                    <barButtonItem enabled="NO" style="plain" id="dvq-qC-k1x">
+                                        <slider key="customView" opaque="NO" tag="1" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="1" id="4kb-Ip-DB9">
+                                            <rect key="frame" x="239" y="5" width="120" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <connections>
+                                                <action selector="updateLevels:" destination="o9W-fE-otg" eventType="valueChanged" id="5DU-Qt-Qm4"/>
+                                            </connections>
+                                        </slider>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                            <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gyy-vC-7DJ" userLabel="Current Time View">
+                                <rect key="frame" x="291" y="10" width="74" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            </view>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uI4-5W-GL9">
+                                <rect key="frame" x="304" y="14" width="48" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <viewLayoutGuide key="safeArea" id="nHd-a5-mzJ"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="VYB-ZW-JGp" appends="YES" id="lsa-8T-euA"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="chromaLevelSlider" destination="4kb-Ip-DB9" id="0FE-QA-mQE"/>
+                        <outlet property="currentTime" destination="uI4-5W-GL9" id="fJZ-nv-uxd"/>
+                        <outlet property="lumaLevelSlider" destination="f3W-At-AIq" id="VLI-C4-SPP"/>
+                        <outlet property="playerView" destination="M8i-B1-qHS" id="wQx-dU-pWK"/>
+                        <outlet property="timeView" destination="Gyy-vC-7DJ" id="fPg-Tz-dqe"/>
+                        <outlet property="toolbar" destination="6vT-Fl-236" id="Kb0-Dt-hz5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2If-gz-zQK" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="VYB-ZW-JGp">
+                    <connections>
+                        <action selector="handleTapGesture:" destination="o9W-fE-otg" id="lgA-Xm-Nbh"/>
+                        <outlet property="delegate" destination="o9W-fE-otg" id="NS7-OZ-cXP"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="209" y="172"/>
+        </scene>
+    </scenes>
+</document>
