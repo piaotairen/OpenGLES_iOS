@@ -82,7 +82,7 @@ class EAGLView: UIView {
     // MARK: - override
     
     override class var layerClass: Swift.AnyClass {
-        return CAEAGLLayer.superclass()!
+        return CAEAGLLayer.self
     }
     
     // MARK: - Life Cycle
@@ -335,7 +335,11 @@ class EAGLView: UIView {
     @discardableResult
     
     private func loadShaders() -> Bool {
-        var vertShader = UnsafeMutablePointer<GLuint>(bitPattern: 0)!, fragShader = UnsafeMutablePointer<GLuint>(bitPattern: 0)!
+        var vertShader = UnsafeMutablePointer<GLuint>.allocate(capacity: 0)
+        vertShader.initialize(to: 0)
+        var fragShader = UnsafeMutablePointer<GLuint>.allocate(capacity: 0)
+        fragShader.initialize(to: 0)
+        
         let vertShaderURL: URL, fragShaderURL: URL
         
         // Create the shader program.

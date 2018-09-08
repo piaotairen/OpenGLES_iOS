@@ -14,7 +14,7 @@
         <scene sceneID="Wy6-zy-MdP">
             <objects>
                 <viewController id="o9W-fE-otg" customClass="ViewController" customModule="AVPlayerDemo" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="M8i-B1-qHS" customClass="APLEAGLView">
+                    <view key="view" contentMode="scaleToFill" id="M8i-B1-qHS" customClass="EAGLView" customModule="AVPlayerDemo" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <subviews>
@@ -34,7 +34,7 @@
                                             <rect key="frame" x="103" y="5" width="120" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <connections>
-                                                <action selector="updateLevels:" destination="o9W-fE-otg" eventType="valueChanged" id="nAu-xd-tdn"/>
+                                                <action selector="updateLevels:" destination="o9W-fE-otg" eventType="valueChanged" id="f29-Ar-zQz"/>
                                             </connections>
                                         </slider>
                                     </barButtonItem>
@@ -45,7 +45,7 @@
                                             <rect key="frame" x="239" y="5" width="120" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <connections>
-                                                <action selector="updateLevels:" destination="o9W-fE-otg" eventType="valueChanged" id="5DU-Qt-Qm4"/>
+                                                <action selector="updateLevels:" destination="o9W-fE-otg" eventType="valueChanged" id="DBd-aA-pgj"/>
                                             </connections>
                                         </slider>
                                     </barButtonItem>
@@ -71,12 +71,12 @@
                         </connections>
                     </view>
                     <connections>
-                        <outlet property="chromaLevelSlider" destination="4kb-Ip-DB9" id="0FE-QA-mQE"/>
-                        <outlet property="currentTime" destination="uI4-5W-GL9" id="fJZ-nv-uxd"/>
-                        <outlet property="lumaLevelSlider" destination="f3W-At-AIq" id="VLI-C4-SPP"/>
-                        <outlet property="playerView" destination="M8i-B1-qHS" id="wQx-dU-pWK"/>
-                        <outlet property="timeView" destination="Gyy-vC-7DJ" id="fPg-Tz-dqe"/>
-                        <outlet property="toolbar" destination="6vT-Fl-236" id="Kb0-Dt-hz5"/>
+                        <outlet property="chromaLevelSlider" destination="4kb-Ip-DB9" id="EOR-lW-WAK"/>
+                        <outlet property="currentTime" destination="uI4-5W-GL9" id="wfH-9e-uPe"/>
+                        <outlet property="customToolbar" destination="6vT-Fl-236" id="CJ1-Jg-s9i"/>
+                        <outlet property="lumaLevelSlider" destination="f3W-At-AIq" id="V89-RU-6a3"/>
+                        <outlet property="playerView" destination="M8i-B1-qHS" id="0DT-FD-VGs"/>
+                        <outlet property="timeView" destination="Gyy-vC-7DJ" id="3if-ef-jlh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2If-gz-zQK" sceneMemberID="firstResponder"/>
