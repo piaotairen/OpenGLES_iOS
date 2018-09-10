@@ -61,7 +61,7 @@ class EAGLView: UIView {
     
     fileprivate var chromaTexture: CVOpenGLESTexture?
     
-    fileprivate var videoTextureCache: UnsafeMutablePointer<CVOpenGLESTextureCache?>?
+    fileprivate var videoTextureCache: CVOpenGLESTextureCache?
     
     fileprivate var frameBufferHandle: GLuint = 0
     
@@ -135,8 +135,8 @@ class EAGLView: UIView {
         glUniformMatrix3fv(uniforms[uniform.color_conversion_matrix.rawValue], 1, GLboolean(GL_FALSE), preferredConversion)
         
         /// Create CVOpenGLESTextureCacheRef for optimal CVPixelBufferRef to GLES texture conversion.
-        if let videoTextureCache = videoTextureCache, let context = context {
-            let err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault, nil, context, nil, videoTextureCache)
+        if let context = context {
+            let err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault, nil, context, nil, &videoTextureCache)
             if err != noErr {
                 print("Error at CVOpenGLESTextureCacheCreate \(err)")
                 return
@@ -179,7 +179,7 @@ class EAGLView: UIView {
              */
             glActiveTexture(GLenum(GL_TEXTURE0))
             err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
-                                                               (videoTextureCache?.pointee)!,
+                                                               videoTextureCache!,
                                                                pixelBuffer,
                                                                nil,
                                                                GLenum(GL_TEXTURE_2D),
@@ -203,7 +203,7 @@ class EAGLView: UIView {
             // UV-plane.
             glActiveTexture(GLenum(GL_TEXTURE1))
             err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
-                                                               (videoTextureCache?.pointee)!,
+                                                               videoTextureCache!,
                                                                pixelBuffer,
                                                                nil,
                                                                GLenum(GL_TEXTURE_2D),
