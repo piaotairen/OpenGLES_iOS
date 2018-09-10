@@ -327,7 +327,7 @@ class EAGLView: UIView {
         
         // Periodic texture cache flush every frame
         if videoTextureCache != nil {
-            CVOpenGLESTextureCacheFlush(videoTextureCache as! CVOpenGLESTextureCache, 0)
+            CVOpenGLESTextureCacheFlush(videoTextureCache!, 0)
         }
     }
     

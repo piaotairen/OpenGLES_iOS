@@ -209,7 +209,7 @@ class ViewController: UIViewController {
                     let videoTrack = tracks.first
                     videoTrack?.loadValuesAsynchronously(forKeys: ["preferredTransform"], completionHandler: { [weak self] in
                         var preferredError: NSError?
-                        if videoTrack?.statusOfValue(forKey: "preferredTransform", error: &preferredError) as! AVKeyValueStatus == .loaded {
+                        if let status = videoTrack?.statusOfValue(forKey: "preferredTransform", error: &preferredError) as AVKeyValueStatus?, status == .loaded {
                             if let preferredTransform = videoTrack?.preferredTransform {
                                 
                                 /*
