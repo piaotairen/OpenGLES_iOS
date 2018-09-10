@@ -162,7 +162,8 @@ class EAGLView: UIView {
             /*
              Use the color attachment of the pixel buffer to determine the appropriate color conversion matrix.
              */
-            let colorAttachments = CVBufferGetAttachment(pixelBuffer, kCVImageBufferYCbCrMatrixKey, nil) as! CFString
+            let unmanagedAttachments = CVBufferGetAttachment(pixelBuffer, kCVImageBufferYCbCrMatrixKey, nil)
+            let colorAttachments = unmanagedAttachments?.takeRetainedValue() as! CFString
             
             if colorAttachments == kCVImageBufferYCbCrMatrix_ITU_R_601_4 {
                 preferredConversion = UnsafePointer<GLfloat>(kColorConversion601)
