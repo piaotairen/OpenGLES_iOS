@@ -56,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		47C10B3E21B629D2001D3D02 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DF5747AC213FDBBE00B05978 /* OpenGLES_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpenGLES_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF5747AF213FDBBE00B05978 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DF5747B1213FDBBE00B05978 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -196,6 +197,7 @@
 				DF5747EA213FDF8C00B05978 /* Assets.xcassets */,
 				DF5747EC213FDF8C00B05978 /* LaunchScreen.storyboard */,
 				DF5747EF213FDF8C00B05978 /* Info.plist */,
+				47C10B3E21B629D2001D3D02 /* README.md */,
 			);
 			path = AVPlayerDemo;
 			sourceTree = "<group>";
@@ -649,6 +651,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K9873S4678;
 				INFOPLIST_FILE = OpenGLES_iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -666,6 +669,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K9873S4678;
 				INFOPLIST_FILE = OpenGLES_iOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -761,7 +765,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CK8A46KS2U;
+				DEVELOPMENT_TEAM = 2DPNZDC58L;
 				INFOPLIST_FILE = AVPlayerDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -779,7 +783,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = CK8A46KS2U;
+				DEVELOPMENT_TEAM = 2DPNZDC58L;
 				INFOPLIST_FILE = AVPlayerDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

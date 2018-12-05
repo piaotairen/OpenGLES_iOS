@@ -7,13 +7,11 @@
 //
 
 import UIKit
-import MobileCoreServices
-import AVFoundation
 import Photos
+import AVFoundation
+import MobileCoreServices
 
 class CustomImagePickerController: UIImagePickerController {
-    
-    //MARK: - Property
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .landscape
@@ -24,18 +22,29 @@ class ViewController: UIViewController {
     
     //MARK: - Property
     
-    fileprivate var player: AVPlayer!
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscape
+    }
     
-    private let myVideoOutputQueue = DispatchQueue(label: "myVideoOutputQueue")
+    /// 播放器 @objc dynamic支持监听
+    @objc dynamic fileprivate var player: AVPlayer!
     
-    fileprivate var notificationToken: NSObjectProtocol?
+    /// 视频输出线程
+    private let videoOutputQueue = DispatchQueue(label: "videoOutputQueue")
     
-    fileprivate var timeObserver: Any? = nil
+    /// 播放结果监听
+    fileprivate var playToEndTimeObserver: NSObjectProtocol?
     
+    /// 周期时间监听
+    fileprivate var periodicTimeObserver: Any? = nil
+    
+    /// EAGLView
     @IBOutlet var playerView: EAGLView!
     
+    /// 强度Slider
     @IBOutlet weak var chromaLevelSlider: UISlider!
     
+    /// 亮度Slider
     @IBOutlet weak var lumaLevelSlider: UISlider!
     
     @IBOutlet weak var currentTime: UILabel!
@@ -44,65 +53,41 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var customToolbar: UIToolbar!
     
-    private let ONE_FRAME_DURATION = 0.03
+    /// 帧率
+    private let frameDuration = 0.03
     
-    private let LUMA_SLIDER_TAG = 0
+    private let lumaSliderTag = 0
     
-    private let CHROMA_SLIDER_TAG = 1
+    private let chromaSliderTag = 1
     
+    /// 视频输出
     private var videoOutput: AVPlayerItemVideoOutput!
     
     private var displayLink: CADisplayLink!
     
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscape
-    }
-    
-    let AVPlayerItemStatusContext = UnsafeMutableRawPointer.allocate(byteCount: 0, alignment: 0)
+    /// 播放状态监听上下文
+    let playerItemStatusContext = UnsafeMutableRawPointer.allocate(byteCount: 0, alignment: 0)
     
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        playerView.lumaThreshold = lumaLevelSlider.value
-        playerView.chromaThreshold = chromaLevelSlider.value
-        
-        player = AVPlayer()
-        addTimeObserverToPlayer()
-        
-        displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCallback(sender:)))
-        displayLink.add(to: RunLoop.current, forMode: .commonModes)
-        displayLink.isPaused = true
-        
-        let pixBuffAttributes = [kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] as [String : Any]
-        videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: pixBuffAttributes)
-        videoOutput.setDelegate(self, queue: myVideoOutputQueue)
+        prepareForPlay()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if player.currentItem != nil {
-            addObserver(player.currentItem!, forKeyPath: "status", options: .new, context: AVPlayerItemStatusContext)
-            addTimeObserverToPlayer()
-        }
-        
         checkPermission()
+        addPlayerObservers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if player.currentItem != nil {
-            removeObserver(player.currentItem!, forKeyPath: "status", context: AVPlayerItemStatusContext)
-            removeTimeObserverFromPlayer()
-        }
-        
-        if notificationToken != nil {
-            NotificationCenter.default.removeObserver(notificationToken as Any, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
-            notificationToken = nil
-        }
+        removePlayerObservers()
+        removePlayToEndTimeObserver()
     }
     
     override func didReceiveMemoryWarning() {
@@ -110,9 +95,14 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    deinit {
+        playerItemStatusContext.deallocate()
+    }
+    
     //MARK: - Private
     
-    func checkPermission() {
+    /// 相册鉴权
+    private func checkPermission() {
         let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
         switch photoAuthorizationStatus {
         case .authorized:
@@ -136,6 +126,22 @@ class ViewController: UIViewController {
         }
     }
     
+    /// 播放准备
+    private func prepareForPlay() {
+        player = AVPlayer()
+        playerView.lumaThreshold = lumaLevelSlider.value
+        playerView.chromaThreshold = chromaLevelSlider.value
+        
+        displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCallback(sender:)))
+        displayLink.add(to: RunLoop.current, forMode: .commonModes)
+        displayLink.isPaused = true
+        
+        let pixBuffAttributes = [kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] as [String : Any]
+        videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: pixBuffAttributes)
+        videoOutput.setDelegate(self, queue: videoOutputQueue)
+    }
+    
+    /// 播放渲染
     @objc private func displayLinkCallback(sender: CADisplayLink) {
         /*
          The callback gets called once every Vsync.
@@ -150,7 +156,7 @@ class ViewController: UIViewController {
         outputItemTime = videoOutput.itemTime(forHostTime: nextVSync)
         
         if videoOutput.hasNewPixelBuffer(forItemTime: outputItemTime) {
-            let pixelBuffer: CVPixelBuffer?
+            var pixelBuffer: CVPixelBuffer?
             pixelBuffer = videoOutput.copyPixelBuffer(forItemTime: outputItemTime, itemTimeForDisplay: nil)
             playerView.displayPixelBuffer(pixelBuffer: pixelBuffer)
         }
@@ -161,9 +167,9 @@ class ViewController: UIViewController {
     @IBAction func updateLevels(_ sender: UISlider) {
         let tag = sender.tag
         switch tag {
-        case LUMA_SLIDER_TAG:
+        case lumaSliderTag:
             playerView.lumaThreshold = lumaLevelSlider.value
-        case CHROMA_SLIDER_TAG:
+        case chromaSliderTag:
             playerView.chromaThreshold = chromaLevelSlider.value
         default:
             break
@@ -217,14 +223,14 @@ class ViewController: UIViewController {
                                  */
                                 self?.playerView.preferredRotation = GLfloat(-1 * atan2(preferredTransform.b, preferredTransform.a))
                             }
-                            self?.addDidPlayToEndTimeNotificationForPlayerItem(item)
+                            self?.addPlayToEndTimeObserver(item)
                             
                             DispatchQueue.main.async {
                                 if let videoOutput = self?.videoOutput {
                                     item.add(videoOutput)
                                 }
                                 self?.player.replaceCurrentItem(with: item)
-                                if let duration = self?.ONE_FRAME_DURATION {
+                                if let duration = self?.frameDuration {
                                     self?.videoOutput.requestNotificationOfMediaDataChange(withAdvanceInterval: duration)
                                 }
                                 self?.player.play()
@@ -245,62 +251,78 @@ class ViewController: UIViewController {
     //MARK: - observe
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if context == AVPlayerItemStatusContext {
-            let status = change![NSKeyValueChangeKey.newKey] as! AVPlayerItemStatus
-            switch status {
-            case .unknown:
-                break
-            case .readyToPlay:
-                if let rect = player.currentItem?.presentationSize {
-                    playerView.presentationRect = rect
-                }
-            case .failed:
-                stopLoadingAnimationAndHandleError(player.currentItem?.error)
+        guard context == playerItemStatusContext,
+            let change = change,
+            let value = change[NSKeyValueChangeKey.newKey] else {
+                return
+        }
+        guard let status = value as? Int else {
+            return
+        }
+        switch status {
+        case AVPlayerItem.Status.readyToPlay.rawValue:
+            if let rect = player.currentItem?.presentationSize {
+                playerView.presentationRect = rect
             }
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        case AVPlayerItem.Status.failed.rawValue:
+            stopLoadingAnimationAndHandleError(player.currentItem?.error)
+        default:
+            break
         }
     }
     
-    private func addTimeObserverToPlayer() {
+    //MARK: - Observer
+    
+    private func addPlayerObservers() {
+        self.addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: playerItemStatusContext)
+        
         /*
          Adds a time observer to the player to periodically refresh the time label to reflect current time.
          */
-        guard timeObserver == nil else {
+        guard periodicTimeObserver == nil else {
             return
         }
         /*
          Use weak reference to self to ensure that a strong reference cycle is not formed between the view controller, player and notification block.
          */
-        timeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 2), queue: DispatchQueue.main, using: { [weak self] (time) in
+        periodicTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 2), queue: DispatchQueue.main, using: { [weak self] (time) in
             print("\(time.value) \(time.timescale)")
             self?.syncTimeLabel()
         })
     }
     
-    private func removeTimeObserverFromPlayer() {
-        if timeObserver != nil {
-            player.removeTimeObserver(timeObserver!)
-            timeObserver = nil
+    private func removePlayerObservers() {
+        removeObserver(self, forKeyPath: "player.currentItem.status", context: playerItemStatusContext)
+        
+        if periodicTimeObserver != nil {
+            player.removeTimeObserver(periodicTimeObserver!)
+            periodicTimeObserver = nil
         }
     }
     
-    //MARK: - Play Control
-    
-    private func addDidPlayToEndTimeNotificationForPlayerItem(_ item: AVPlayerItem) {
-        if notificationToken != nil {
-            notificationToken = nil
+    private func addPlayToEndTimeObserver(_ item: AVPlayerItem) {
+        if playToEndTimeObserver != nil {
+            playToEndTimeObserver = nil
         }
         
         /*
          Setting actionAtItemEnd to None prevents the movie from getting paused at item end. A very simplistic, and not gapless, looped playback.
          */
         player.actionAtItemEnd = .none
-        notificationToken = NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item, queue: OperationQueue.main, using: { [weak self] (note) in
+        playToEndTimeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item, queue: OperationQueue.main, using: { [weak self] (note) in
             // Simple item playback rewind.
             self?.player.currentItem?.seek(to: kCMTimeZero, completionHandler: nil)
         })
     }
+    
+    private func removePlayToEndTimeObserver() {
+        if playToEndTimeObserver != nil {
+            NotificationCenter.default.removeObserver(playToEndTimeObserver as Any, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+            playToEndTimeObserver = nil
+        }
+    }
+    
+    //MARK: - Play Control
     
     private func syncTimeLabel() {
         var seconds = CMTimeGetSeconds(player.currentTime())
@@ -359,10 +381,10 @@ extension ViewController: UIImagePickerControllerDelegate {
         
         // Make sure our playback is resumed from any interruption.
         if let item = player.currentItem {
-            addDidPlayToEndTimeNotificationForPlayerItem(item)
+            addPlayToEndTimeObserver(item)
         }
         
-        videoOutput.requestNotificationOfMediaDataChange(withAdvanceInterval: ONE_FRAME_DURATION)
+        videoOutput.requestNotificationOfMediaDataChange(withAdvanceInterval: frameDuration)
         player.play()
         
         picker.delegate = nil
