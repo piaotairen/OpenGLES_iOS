@@ -39,20 +39,6 @@
 			remoteGlobalIDString = DF5747AB213FDBBE00B05978;
 			remoteInfo = OpenGLES_iOS;
 		};
-		DF5747F5213FDF8D00B05978 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DF5747A4213FDBBD00B05978 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DF5747E0213FDF8B00B05978;
-			remoteInfo = AVPlayerDemo;
-		};
-		DF574800213FDF8D00B05978 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = DF5747A4213FDBBD00B05978 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DF5747E0213FDF8B00B05978;
-			remoteInfo = AVPlayerDemo;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -77,8 +63,6 @@
 		DF5747EA213FDF8C00B05978 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DF5747ED213FDF8C00B05978 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DF5747EF213FDF8C00B05978 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DF5747F4213FDF8C00B05978 /* AVPlayerDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AVPlayerDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DF5747FF213FDF8D00B05978 /* AVPlayerDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AVPlayerDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF57480F213FE04E00B05978 /* EAGLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EAGLView.swift; sourceTree = "<group>"; };
 		DF920FF6214133D200DE6CAD /* Shader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.vsh; sourceTree = "<group>"; };
 		DF920FF7214133D200DE6CAD /* Shader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Shader.fsh; sourceTree = "<group>"; };
@@ -113,20 +97,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DF5747F1213FDF8C00B05978 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DF5747FC213FDF8D00B05978 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -148,8 +118,6 @@
 				DF5747C0213FDBC100B05978 /* OpenGLES_iOSTests.xctest */,
 				DF5747CB213FDBC100B05978 /* OpenGLES_iOSUITests.xctest */,
 				DF5747E1213FDF8B00B05978 /* AVPlayerDemo.app */,
-				DF5747F4213FDF8C00B05978 /* AVPlayerDemoTests.xctest */,
-				DF5747FF213FDF8D00B05978 /* AVPlayerDemoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -275,42 +243,6 @@
 			productReference = DF5747E1213FDF8B00B05978 /* AVPlayerDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DF5747F3213FDF8C00B05978 /* AVPlayerDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DF574809213FDF8D00B05978 /* Build configuration list for PBXNativeTarget "AVPlayerDemoTests" */;
-			buildPhases = (
-				DF5747F0213FDF8C00B05978 /* Sources */,
-				DF5747F1213FDF8C00B05978 /* Frameworks */,
-				DF5747F2213FDF8C00B05978 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DF5747F6213FDF8D00B05978 /* PBXTargetDependency */,
-			);
-			name = AVPlayerDemoTests;
-			productName = AVPlayerDemoTests;
-			productReference = DF5747F4213FDF8C00B05978 /* AVPlayerDemoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		DF5747FE213FDF8D00B05978 /* AVPlayerDemoUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DF57480C213FDF8D00B05978 /* Build configuration list for PBXNativeTarget "AVPlayerDemoUITests" */;
-			buildPhases = (
-				DF5747FB213FDF8D00B05978 /* Sources */,
-				DF5747FC213FDF8D00B05978 /* Frameworks */,
-				DF5747FD213FDF8D00B05978 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				DF574801213FDF8D00B05978 /* PBXTargetDependency */,
-			);
-			name = AVPlayerDemoUITests;
-			productName = AVPlayerDemoUITests;
-			productReference = DF5747FF213FDF8D00B05978 /* AVPlayerDemoUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -323,25 +255,21 @@
 				TargetAttributes = {
 					DF5747AB213FDBBE00B05978 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1010;
 					};
 					DF5747BF213FDBC100B05978 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1010;
 						TestTargetID = DF5747AB213FDBBE00B05978;
 					};
 					DF5747CA213FDBC100B05978 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1010;
 						TestTargetID = DF5747AB213FDBBE00B05978;
 					};
 					DF5747E0213FDF8B00B05978 = {
 						CreatedOnToolsVersion = 9.4.1;
-					};
-					DF5747F3213FDF8C00B05978 = {
-						CreatedOnToolsVersion = 9.4.1;
-						TestTargetID = DF5747E0213FDF8B00B05978;
-					};
-					DF5747FE213FDF8D00B05978 = {
-						CreatedOnToolsVersion = 9.4.1;
-						TestTargetID = DF5747E0213FDF8B00B05978;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -362,8 +290,6 @@
 				DF5747BF213FDBC100B05978 /* OpenGLES_iOSTests */,
 				DF5747CA213FDBC100B05978 /* OpenGLES_iOSUITests */,
 				DF5747E0213FDF8B00B05978 /* AVPlayerDemo */,
-				DF5747F3213FDF8C00B05978 /* AVPlayerDemoTests */,
-				DF5747FE213FDF8D00B05978 /* AVPlayerDemoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -405,20 +331,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DF5747F2213FDF8C00B05978 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DF5747FD213FDF8D00B05978 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -457,20 +369,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DF5747F0213FDF8C00B05978 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		DF5747FB213FDF8D00B05978 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -483,16 +381,6 @@
 			isa = PBXTargetDependency;
 			target = DF5747AB213FDBBE00B05978 /* OpenGLES_iOS */;
 			targetProxy = DF5747CC213FDBC100B05978 /* PBXContainerItemProxy */;
-		};
-		DF5747F6213FDF8D00B05978 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DF5747E0213FDF8B00B05978 /* AVPlayerDemo */;
-			targetProxy = DF5747F5213FDF8D00B05978 /* PBXContainerItemProxy */;
-		};
-		DF574801213FDF8D00B05978 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DF5747E0213FDF8B00B05978 /* AVPlayerDemo */;
-			targetProxy = DF574800213FDF8D00B05978 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -659,7 +547,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zihai.OpenGLES-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -677,7 +565,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zihai.OpenGLES-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -688,6 +576,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DPNZDC58L;
 				INFOPLIST_FILE = OpenGLES_iOSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -696,7 +585,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zihai.OpenGLES-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenGLES_iOS.app/OpenGLES_iOS";
 			};
@@ -708,6 +597,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DPNZDC58L;
 				INFOPLIST_FILE = OpenGLES_iOSTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -716,7 +606,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zihai.OpenGLES-iOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenGLES_iOS.app/OpenGLES_iOS";
 			};
@@ -727,6 +617,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DPNZDC58L;
 				INFOPLIST_FILE = OpenGLES_iOSUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -735,7 +626,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zihai.OpenGLES-iOSUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = OpenGLES_iOS;
 			};
@@ -746,6 +637,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2DPNZDC58L;
 				INFOPLIST_FILE = OpenGLES_iOSUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -754,7 +646,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zihai.OpenGLES-iOSUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = OpenGLES_iOS;
 			};
@@ -773,7 +665,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zihai.AVPlayerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -791,86 +683,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.zihai.AVPlayerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		DF57480A213FDF8D00B05978 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = AVPlayerDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zihai.AVPlayerDemoTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AVPlayerDemo.app/AVPlayerDemo";
-			};
-			name = Debug;
-		};
-		DF57480B213FDF8D00B05978 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = AVPlayerDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zihai.AVPlayerDemoTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AVPlayerDemo.app/AVPlayerDemo";
-			};
-			name = Release;
-		};
-		DF57480D213FDF8D00B05978 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = AVPlayerDemoUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zihai.AVPlayerDemoUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AVPlayerDemo;
-			};
-			name = Debug;
-		};
-		DF57480E213FDF8D00B05978 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = AVPlayerDemoUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zihai.AVPlayerDemoUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = AVPlayerDemo;
 			};
 			name = Release;
 		};
@@ -918,24 +732,6 @@
 			buildConfigurations = (
 				DF574807213FDF8D00B05978 /* Debug */,
 				DF574808213FDF8D00B05978 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DF574809213FDF8D00B05978 /* Build configuration list for PBXNativeTarget "AVPlayerDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DF57480A213FDF8D00B05978 /* Debug */,
-				DF57480B213FDF8D00B05978 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DF57480C213FDF8D00B05978 /* Build configuration list for PBXNativeTarget "AVPlayerDemoUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DF57480D213FDF8D00B05978 /* Debug */,
-				DF57480E213FDF8D00B05978 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

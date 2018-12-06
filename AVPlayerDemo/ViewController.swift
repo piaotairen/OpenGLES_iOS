@@ -133,7 +133,7 @@ class ViewController: UIViewController {
         playerView.chromaThreshold = chromaLevelSlider.value
         
         displayLink = CADisplayLink(target: self, selector: #selector(displayLinkCallback(sender:)))
-        displayLink.add(to: RunLoop.current, forMode: .commonModes)
+        displayLink.add(to: RunLoop.current, forMode: RunLoop.Mode.common)
         displayLink.isPaused = true
         
         let pixBuffAttributes = [kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] as [String : Any]
@@ -148,7 +148,7 @@ class ViewController: UIViewController {
          Using the display link's timestamp and duration we can compute the next time the screen will be refreshed, and copy the pixel buffer for that time
          This pixel buffer can then be processed and later rendered on screen.
          */
-        var outputItemTime = kCMTimeInvalid
+        var outputItemTime = CMTime.invalid
         
         // Calculate the nextVsync time which is when the screen will be refreshed next.
         let nextVSync = sender.timestamp + sender.duration
@@ -164,6 +164,7 @@ class ViewController: UIViewController {
     
     //MARK: - Utilities
     
+    /// 参数设置
     @IBAction func updateLevels(_ sender: UISlider) {
         let tag = sender.tag
         switch tag {
@@ -176,6 +177,7 @@ class ViewController: UIViewController {
         }
     }
     
+    /// 选择视频
     @IBAction func loadMovieFromCameraRoll(_ sender: Any) {
         player.pause()
         displayLink.isPaused = true
@@ -194,7 +196,8 @@ class ViewController: UIViewController {
     
     //MARK: - Playback setup
     
-    private func setupPlaybackForURL(_ url: URL) {
+    /// 获取播放资源
+    private func setupPlaybackForAsset(_ asset: PHAsset) {
         /*
          Sets up player item and adds video output to it.
          The tracks property of an asset is loaded via asynchronous key value loading, to access the preferred transform of a video track used to orientate the video while rendering.
@@ -204,44 +207,54 @@ class ViewController: UIViewController {
         // Remove video output from old item, if any.
         player.currentItem?.remove(videoOutput)
         
-        let item = AVPlayerItem(url: url)
+        PHImageManager.default().requestPlayerItem(forVideo: asset, options: nil) { (item, _) in
+            if let item = item {
+                self.preparePlayFor(item: item)
+            }
+        }
+    }
+    
+    /// 准备播放
+    private func preparePlayFor(item: AVPlayerItem) {
         let asset = item.asset
         asset.loadValuesAsynchronously(forKeys: ["tracks"]) {
             var error: NSError?
             if asset.statusOfValue(forKey: "tracks", error: &error) as AVKeyValueStatus == .loaded {
                 let tracks = asset.tracks(withMediaType: .video)
-                if tracks.count > 0 {
-                    // Choose the first video track.
-                    let videoTrack = tracks.first
-                    videoTrack?.loadValuesAsynchronously(forKeys: ["preferredTransform"], completionHandler: { [weak self] in
-                        var preferredError: NSError?
-                        if let status = videoTrack?.statusOfValue(forKey: "preferredTransform", error: &preferredError) as AVKeyValueStatus?, status == .loaded {
-                            if let preferredTransform = videoTrack?.preferredTransform {
-                                
-                                /*
-                                 The orientation of the camera while recording affects the orientation of the images received from an AVPlayerItemVideoOutput. Here we compute a rotation that is used to correctly orientate the video.
-                                 */
-                                self?.playerView.preferredRotation = GLfloat(-1 * atan2(preferredTransform.b, preferredTransform.a))
-                            }
-                            self?.addPlayToEndTimeObserver(item)
-                            
-                            DispatchQueue.main.async {
-                                if let videoOutput = self?.videoOutput {
-                                    item.add(videoOutput)
-                                }
-                                self?.player.replaceCurrentItem(with: item)
-                                if let duration = self?.frameDuration {
-                                    self?.videoOutput.requestNotificationOfMediaDataChange(withAdvanceInterval: duration)
-                                }
-                                self?.player.play()
-                            }
-                        }
-                    })
+                guard tracks.count > 0 else {
+                    return
                 }
+                // Choose the first video track.
+                let videoTrack = tracks.first
+                videoTrack?.loadValuesAsynchronously(forKeys: ["preferredTransform"], completionHandler: { [weak self] in
+                    var preferredError: NSError?
+                    guard let status = videoTrack?.statusOfValue(forKey: "preferredTransform", error: &preferredError) as AVKeyValueStatus?, status == .loaded else {
+                        return
+                    }
+                    if let preferredTransform = videoTrack?.preferredTransform {
+                        /*
+                         The orientation of the camera while recording affects the orientation of the images received from an AVPlayerItemVideoOutput. Here we compute a rotation that is used to correctly orientate the video.
+                         */
+                        self?.playerView.preferredRotation = GLfloat(-1 * atan2(preferredTransform.b, preferredTransform.a))
+                    }
+                    self?.addPlayToEndTimeObserver(item)
+                    
+                    DispatchQueue.main.async {
+                        if let videoOutput = self?.videoOutput {
+                            item.add(videoOutput)
+                        }
+                        self?.player.replaceCurrentItem(with: item)
+                        if let duration = self?.frameDuration {
+                            self?.videoOutput.requestNotificationOfMediaDataChange(withAdvanceInterval: duration)
+                        }
+                        self?.player.play()
+                    }
+                })
             }
         }
     }
     
+    /// 播放失败处理
     private func stopLoadingAnimationAndHandleError(_ error: Error?) {
         if let error = error {
             print(error)
@@ -250,6 +263,7 @@ class ViewController: UIViewController {
     
     //MARK: - observe
     
+    /// 监听Player播放状态变更
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard context == playerItemStatusContext,
             let change = change,
@@ -273,6 +287,7 @@ class ViewController: UIViewController {
     
     //MARK: - Observer
     
+    /// 添加播放状态监听
     private func addPlayerObservers() {
         self.addObserver(self, forKeyPath: "player.currentItem.status", options: .new, context: playerItemStatusContext)
         
@@ -285,12 +300,13 @@ class ViewController: UIViewController {
         /*
          Use weak reference to self to ensure that a strong reference cycle is not formed between the view controller, player and notification block.
          */
-        periodicTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 2), queue: DispatchQueue.main, using: { [weak self] (time) in
+        periodicTimeObserver = player.addPeriodicTimeObserver(forInterval: CMTimeMake(value: 1, timescale: 2), queue: DispatchQueue.main, using: { [weak self] (time) in
             print("\(time.value) \(time.timescale)")
             self?.syncTimeLabel()
         })
     }
     
+    /// 删除播放状态监听
     private func removePlayerObservers() {
         removeObserver(self, forKeyPath: "player.currentItem.status", context: playerItemStatusContext)
         
@@ -300,6 +316,7 @@ class ViewController: UIViewController {
         }
     }
     
+    /// 添加播放结束监听
     private func addPlayToEndTimeObserver(_ item: AVPlayerItem) {
         if playToEndTimeObserver != nil {
             playToEndTimeObserver = nil
@@ -311,10 +328,11 @@ class ViewController: UIViewController {
         player.actionAtItemEnd = .none
         playToEndTimeObserver = NotificationCenter.default.addObserver(forName: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item, queue: OperationQueue.main, using: { [weak self] (note) in
             // Simple item playback rewind.
-            self?.player.currentItem?.seek(to: kCMTimeZero, completionHandler: nil)
+            self?.player.currentItem?.seek(to: CMTime.zero, completionHandler: nil)
         })
     }
     
+    /// 删除播放结束监听
     private func removePlayToEndTimeObserver() {
         if playToEndTimeObserver != nil {
             NotificationCenter.default.removeObserver(playToEndTimeObserver as Any, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
@@ -324,14 +342,15 @@ class ViewController: UIViewController {
     
     //MARK: - Play Control
     
+    /// 设置播放时间
     private func syncTimeLabel() {
         var seconds = CMTimeGetSeconds(player.currentTime())
         if (__inline_isfinited(seconds) == 0) {
             seconds = 0
         }
         
-        var secondsInt = round(seconds)
-        let minutes = secondsInt / 60
+        var secondsInt = Int(round(seconds))
+        let minutes: Int = secondsInt / 60
         secondsInt -= minutes * 60
         
         currentTime.textColor = UIColor.white
@@ -345,15 +364,17 @@ class ViewController: UIViewController {
 
 extension ViewController: AVPlayerItemOutputPullDelegate {
     
+    /// AVPlayerItemOutput回调
     func outputMediaDataWillChange(_ sender: AVPlayerItemOutput) {
         // Restart display link.
         displayLink.isPaused = false
     }
 }
 
-extension ViewController: UIImagePickerControllerDelegate {
+extension ViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    /// 选择视频源
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         dismiss(animated: true, completion: nil)
         
         if player.currentItem == nil {
@@ -372,10 +393,11 @@ extension ViewController: UIImagePickerControllerDelegate {
             currentTime.isHidden = false
         }
         
-        setupPlaybackForURL(info[UIImagePickerControllerReferenceURL] as! URL)
+        setupPlaybackForAsset(info[UIImagePickerController.InfoKey.phAsset] as! PHAsset)
         picker.delegate = self
     }
     
+    /// 取消选择
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
         
@@ -391,11 +413,8 @@ extension ViewController: UIImagePickerControllerDelegate {
     }
 }
 
-extension ViewController: UINavigationControllerDelegate {
-    
-}
-
 extension ViewController: UIGestureRecognizerDelegate {
+    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if touch.view === self.view {
             return false
@@ -403,4 +422,3 @@ extension ViewController: UIGestureRecognizerDelegate {
         return true
     }
 }
-

@@ -107,6 +107,7 @@ class EAGLView: UIView {
     
     // MARK: - override
     
+    /// 视图Layer设为CAEAGLLayer
     override class var layerClass: Swift.AnyClass {
         return CAEAGLLayer.self
     }
@@ -144,6 +145,7 @@ class EAGLView: UIView {
     
     // MARK: OpenGL setup
     
+    /// 设置上下文 初始化
     public func setupGL() {
         guard EAGLContext.setCurrent(context) else {
             return
@@ -174,6 +176,9 @@ class EAGLView: UIView {
     
     // MARK: OpenGLES drawing
     
+    /// 图像渲染
+    ///
+    /// - Parameter pixelBuffer: 像素缓冲区
     public func displayPixelBuffer(pixelBuffer: CVPixelBuffer?) {
         guard let pixelBuffer = pixelBuffer else {
             print("pixelBuffer is nil")
@@ -200,7 +205,7 @@ class EAGLView: UIView {
         } else {
             preferredConversion = colorConversionPointer709
         }
-//        unmanagedAttachments?.release()
+        //        unmanagedAttachments?.release()
         
         /*
          CVOpenGLESTextureCacheCreateTextureFromImage will create GLES texture optimally from CVPixelBufferRef.
@@ -336,6 +341,7 @@ class EAGLView: UIView {
     
     // MARK: Utilities
     
+    /// 设置缓冲区
     private func setupBuffers() {
         glDisable(GLenum(GL_DEPTH_TEST))
         
@@ -361,6 +367,7 @@ class EAGLView: UIView {
         }
     }
     
+    /// 清除纹理
     private func cleanUpTextures() {
         lumaTexture = nil
         chromaTexture = nil
@@ -375,6 +382,7 @@ class EAGLView: UIView {
     // MARK: - OpenGL ES 2 shader compilation
     @discardableResult
     
+    /// 加载着色器资源
     private func loadShaders() -> Bool {
         var vertShader = UnsafeMutablePointer<GLuint>.allocate(capacity: 1)
         vertShader.initialize(to: 0)
@@ -453,6 +461,13 @@ class EAGLView: UIView {
         return true
     }
     
+    /// 编译着色器
+    ///
+    /// - Parameters:
+    ///   - shader: 着色器
+    ///   - type: 类型
+    ///   - url: 资源文件
+    /// - Returns: 是否成功
     private func compileShader(shader: inout UnsafeMutablePointer<GLuint>, type: GLenum, url: URL) -> Bool {
         guard let sourceString = try? String(contentsOf: url, encoding: .utf8) else {
             print("Failed to load vertex shader")
@@ -462,7 +477,7 @@ class EAGLView: UIView {
         let status: UnsafeMutablePointer<GLint> = UnsafeMutablePointer<GLint>.allocate(capacity: 1)
         status.initialize(to: 0)
         var source: UnsafePointer<GLchar>?
-       
+        
         let ccharSource = sourceString.cString(using: .utf8)
         let capacity = (ccharSource?.count)!
         let mutableSource = UnsafeMutablePointer<GLchar>.allocate(capacity: capacity)
@@ -498,6 +513,7 @@ class EAGLView: UIView {
         return true
     }
     
+    /// 链接程序
     private func linkProgram(_ program: GLuint) -> Bool {
         let status = UnsafeMutablePointer<GLint>.allocate(capacity: 1)
         status.initialize(to: 0)
@@ -529,6 +545,7 @@ class EAGLView: UIView {
         return true
     }
     
+    /// 程序生效
     private func validateProgram(_ program: GLuint) -> Bool {
         let status = UnsafeMutablePointer<GLint>.allocate(capacity: 1)
         status.deallocate()
